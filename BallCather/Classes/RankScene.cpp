@@ -1,3 +1,9 @@
+/*RankScene.cpp*/
+
+/*2017-02-17
+		TAT5U
+			ランクシーン*/
+
 #include "RankScene.h"
 
 //追加ヘッダ

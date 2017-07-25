@@ -1,3 +1,9 @@
+/*TitleScene.cpp*/
+
+/*2017-02-17
+		TAT5U
+			タイトルシーン*/
+
 #include "TitleScene.h"
 
 //追加ヘッダ

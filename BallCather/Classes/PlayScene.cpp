@@ -1,3 +1,9 @@
+/*PlayScene.cpp*/
+
+/*2017-02-11
+		TAT5U
+			プレイシーン*/
+
 #include "PlayScene.h"
 
 //追加ヘッダ

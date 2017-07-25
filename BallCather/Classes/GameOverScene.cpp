@@ -1,3 +1,9 @@
+/*GameOverScene.cpp*/
+
+/*2017-02-17
+		TAT5U
+			ゲームオバーシーン*/
+			
 #include "GameOverScene.h"
 
 //追加ヘッダ

@@ -1,3 +1,5 @@
+/*Score.h*/
+
 #include<stdio.h>
 #include<stdlib.h>
 class Score
