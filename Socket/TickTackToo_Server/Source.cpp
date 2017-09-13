@@ -1,6 +1,6 @@
 /*2017-06-13
-狩野 達哉
-サーバサンプルプログラム*/
+	狩野 達哉
+		サーバサンプルプログラム*/
 
 /*****インクルード*****/
 #include<stdio.h>
@@ -19,6 +19,7 @@
 int frame[3][3] = { 0 };
 SOCKET sock;
 
+// 表示
 void DispTickTack(int i, int j)
 {
 	if (frame[i][j] == 0)
@@ -33,679 +34,50 @@ void DispTickTack(int i, int j)
 	{
 		printf("|×");
 	}
-
-
 	if (i >= 2)
 	{
 		printf("|\n");
 	}
 }
 
+// 勝敗判定
 int Judge()
 {
-			// 横
-			if ((frame[0][0] + frame[1][0] + frame[2][0] == 3) || (frame[0][1] + frame[1][1] + frame[2][1] == 3) || (frame[0][2] + frame[1][2] + frame[2][2] == 3))
-			{
-				return 1;
-			}
-			else if ((frame[0][0] + frame[1][0] + frame[2][0] == -3) || (frame[0][1] + frame[1][1] + frame[2][1] == -3) || (frame[0][2] + frame[1][2] + frame[2][2] == -3))
-			{
-				return -1;
-			}
+	// 横
+	if ((frame[0][0] + frame[1][0] + frame[2][0] == 3) || (frame[0][1] + frame[1][1] + frame[2][1] == 3) || (frame[0][2] + frame[1][2] + frame[2][2] == 3))
+	{
+		return 1;
+	}
+	else if ((frame[0][0] + frame[1][0] + frame[2][0] == -3) || (frame[0][1] + frame[1][1] + frame[2][1] == -3) || (frame[0][2] + frame[1][2] + frame[2][2] == -3))
+	{
+		return -1;
+	}
+	
+	// 縦
+	else if ((frame[0][0] + frame[0][1] + frame[0][2] == 3) || (frame[1][0] + frame[1][1] + frame[1][2] == 3) || (frame[2][0] + frame[2][1] + frame[2][2] == 3))
+	{
+		return 1;
+	}
+	else if ((frame[0][0] + frame[0][1] + frame[0][2] == -3) || (frame[1][0] + frame[1][1] + frame[1][2] == -3) || (frame[2][0] + frame[2][1] + frame[2][2] == -3))
+	{
+		return -1;
+	}
 
-			// 縦
-			else if ((frame[0][0] + frame[0][1] + frame[0][2] == 3) || (frame[1][0] + frame[1][1] + frame[1][2] == 3) || (frame[2][0] + frame[2][1] + frame[2][2] == 3))
-			{
-				return 1;
-			}
-			else if ((frame[0][0] + frame[0][1] + frame[0][2] == -3) || (frame[1][0] + frame[1][1] + frame[1][2] == -3) || (frame[2][0] + frame[2][1] + frame[2][2] == -3))
-			{
-				return -1;
-			}
-
-			// 斜め
-			// *   *
-			//   *
-			// *   *
-			else if ((frame[0][0] + frame[1][1] + frame[2][2] == 3) || (frame[2][0] + frame[1][1] + frame[0][2] == 3))
-			{
-				return 1;
-			}
-			else if ((frame[0][0] + frame[1][1] + frame[2][2] == -3) || (frame[2][0] + frame[1][1] + frame[0][2] == -3))
-			{
-				return -1;
-			}
-
-			return 0;
+	// 斜め
+	// *   *
+	//   *
+	// *   *
+	else if ((frame[0][0] + frame[1][1] + frame[2][2] == 3) || (frame[2][0] + frame[1][1] + frame[0][2] == 3))
+	{
+		return 1;
+	}
+	else if ((frame[0][0] + frame[1][1] + frame[2][2] == -3) || (frame[2][0] + frame[1][1] + frame[0][2] == -3))
+	{
+		return -1;
+	}
+	
+	return 0;
 }
-
-
-
-void SimpleAI(int i)
-{
-	int p;
-	int q;
-	int cnt = 0, cnt2 = 0;
-	int tag = 0, tag2 = 0;
-	int AIinputX = 0, AIinputY = 0;
-	char AImes[256] = { 0 }, AImes2[256] = { 0 };
-	char AIsend[256] = { 0 };
-	bool flg = false;
-
-	if (i <= 0)
-	{
-		// CPU
-		p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-		q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-		if (p == 0)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 1)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 2)
-		{
-			sprintf(AImes, "%d", p);
-		}
-
-		// CPU
-		if (q == 0)
-		{
-			sprintf(AImes2, "%d", q);
-		}
-		else if (q == 1)
-		{
-			sprintf(AImes2, "%d", q);
-		}
-		else if (q == 2)
-		{
-			sprintf(AImes2, "%d", q);
-		}
-
-		AIinputX = *AImes - '0';
-		AIinputY = *AImes2 - '0';
-
-		// CPU
-		while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || p > 2 || q > 2)
-		{
-
-			// CPU
-			p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			if (p == 0)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 1)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 2)
-			{
-				sprintf(AImes, "%d", p);
-			}
-
-			// CPU
-			if (q == 0)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 1)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 2)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-		}
-	}
-	else
-	{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		// 横+
-		while (cnt2 < 3)
-		{
-			if (frame[cnt][cnt2] + frame[cnt + 1][cnt2] + frame[cnt + 2][cnt2] == 2)
-			{
-				tag = cnt2;
-				flg = true;
-			}
-			cnt2++;
-		}
-
-		// CPU
-		p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-		if (p == 0)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 1)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 2)
-		{
-			sprintf(AImes, "%d", p);
-		}
-
-		q = tag;
-		sprintf(AImes2, "%d", q);
-
-		AIinputX = *AImes - '0';
-		AIinputY = *AImes2 - '0';
-
-		// CPU
-		while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || p > 2)
-		{
-			if (frame[0][tag] != 0 && frame[1][tag] != 0 && frame[2][tag] != 0)
-			{
-				break;
-			}
-			p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			if (p == 0)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 1)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 2)
-			{
-				sprintf(AImes, "%d", p);
-			}
-
-			q = tag;
-
-			sprintf(AImes2, "%d", q);
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-		}
-		cnt2 = 0;
-		if (flg == false)
-		{
-
-			while (cnt < 3)
-			{
-				if (frame[cnt][cnt2] + frame[cnt][cnt2 + 1] + frame[cnt][cnt2 + 2] == 2)
-				{
-					tag = cnt;
-					flg = true;
-				}
-				cnt++;
-			}
-
-			q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			p = tag;
-			sprintf(AImes, "%d", p);
-			if (q == 0)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 1)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 2)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || q > 2)
-			{
-				//printf("222");
-				if (frame[tag][0] != 0 && frame[tag][1] != 0 && frame[tag][2] != 0)
-				{
-					break;
-				}
-				q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-				p = tag;
-				sprintf(AImes, "%d", p);
-				if (q == 0)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 1)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 2)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		//printf("%d", cnt);
-		cnt = 0;
-
-		if (flg == false)
-		{
-			//	斜め+
-			if (frame[cnt][cnt] + frame[cnt + 1][cnt2 + 1] + frame[cnt + 2][cnt2 + 2] == 2)
-			{
-				tag = cnt;
-				tag2 = cnt2;
-				flg = true;
-			}
-			p = tag;
-			q = tag2;
-
-			sprintf(AImes, "%d", p);
-			sprintf(AImes2, "%d", q);
-
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0))
-			{
-				if (frame[0][0] != 0 && frame[1][1] != 0 && frame[2][2] != 0)
-				{
-					break;
-				}
-				tag++;
-				tag2++;
-
-				p = tag;
-				q = tag2;
-
-				sprintf(AImes, "%d", p);
-				sprintf(AImes2, "%d", q);
-
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		cnt = 0;
-		cnt2 = 0;
-		if (flg == false)
-		{
-
-			//	斜め2+
-			if (frame[cnt + 2][cnt] + frame[cnt + 1][cnt2 + 1] + frame[cnt][cnt2 + 2] == 2)
-			{
-				tag = cnt + 2;
-				tag2 = cnt2;
-				flg = true;
-			}
-			p = tag;
-			q = tag2;
-
-			sprintf(AImes, "%d", p);
-			sprintf(AImes2, "%d", q);
-
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0))
-			{
-				if (frame[2][0] != 0 && frame[1][1] != 0 && frame[0][2] != 0)
-				{
-					break;
-				}
-				tag--;
-				tag2++;
-
-				p = tag;
-				q = tag2;
-
-				sprintf(AImes, "%d", p);
-				sprintf(AImes2, "%d", q);
-
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		cnt = 0;
-		cnt2 = 0;
-
-
-
-
-
-
-
-
-
-
-		// 横
-		while (cnt2 < 3)
-		{
-			if (frame[cnt][cnt2] + frame[cnt + 1][cnt2] + frame[cnt + 2][cnt2] == -2)
-			{
-				//printf("aaaaaa");
-				tag = cnt2;
-				flg = true;
-			}
-			cnt2++;
-		}
-
-		// CPU
-		p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-		if (p == 0)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 1)
-		{
-			sprintf(AImes, "%d", p);
-		}
-		else if (p == 2)
-		{
-			sprintf(AImes, "%d", p);
-		}
-
-		q = tag;
-		sprintf(AImes2, "%d", q);
-
-		AIinputX = *AImes - '0';
-		AIinputY = *AImes2 - '0';
-
-		// CPU
-		while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || p > 2)
-		{
-			if (frame[0][tag] != 0 && frame[1][tag] != 0&&frame[2][tag] != 0)
-			{
-				break;
-			}
-			//printf("11");
-			p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			if (p == 0)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 1)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 2)
-			{
-				sprintf(AImes, "%d", p);
-			}
-
-			q = tag;
-
-			sprintf(AImes2, "%d", q);
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-		}
-		cnt2 = 0;
-		if (flg == false)
-		{
-
-			while (cnt < 3)
-			{
-				if (frame[cnt][cnt2] + frame[cnt][cnt2 + 1] + frame[cnt][cnt2 + 2] == -2)
-				{
-					//printf("bbbbbb");
-					tag = cnt;
-					flg = true;
-				}
-				cnt++;
-			}
-
-			q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			p = tag;
-			sprintf(AImes, "%d", p);
-			if (q == 0)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 1)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 2)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || q > 2)
-			{
-				//printf("222");
-				if (frame[tag][0] != 0 && frame[tag][1] != 0 && frame[tag][2] != 0)
-				{
-					break;
-				}
-				q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-				p = tag;
-				sprintf(AImes, "%d", p);
-				if (q == 0)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 1)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 2)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		//printf("%d", cnt);
-		cnt = 0;
-
-		if (flg == false)
-		{
-			//	斜め
-			if (frame[cnt][cnt] + frame[cnt+ 1 ][cnt2 + 1] + frame[cnt + 2][cnt2 + 2] == -2)
-			{
-				tag = cnt;
-				tag2 = cnt2;
-				flg = true;
-			}
-			p = tag;
-			q = tag2;
-
-			sprintf(AImes, "%d", p);
-			sprintf(AImes2, "%d", q);
-
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0))
-			{
-				if (frame[0][0] != 0 && frame[1][1] != 0 && frame[2][2] != 0)
-				{
-					break;
-				}
-				tag++;
-				tag2++;
-
-				p = tag;
-				q = tag2;
-
-				sprintf(AImes, "%d", p);
-				sprintf(AImes2, "%d", q);
-
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		cnt = 0;
-		cnt2 = 0;
-		if (flg == false)
-		{
-
-			//	斜め2
-			if (frame[cnt + 2][cnt] + frame[cnt + 1][cnt2 + 1] + frame[cnt][cnt2 + 2] == -2)
-			{
-				tag = cnt + 2;
-				tag2 = cnt2;
-				flg = true;
-			}
-			p = tag;
-			q = tag2;
-
-			sprintf(AImes, "%d", p);
-			sprintf(AImes2, "%d", q);
-
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0))
-			{
-				if (frame[2][0] != 0 && frame[1][1] != 0 && frame[0][2] != 0)
-				{
-					break;
-				}
-				tag--;
-				tag2++;
-
-				p = tag;
-				q = tag2;
-
-				sprintf(AImes, "%d", p);
-				sprintf(AImes2, "%d", q);
-
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-		cnt = 0;
-		cnt2 = 0;
-		if (flg == false)
-		{
-			//printf("yooo");
-
-			// CPU
-			p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-			if (p == 0)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 1)
-			{
-				sprintf(AImes, "%d", p);
-			}
-			else if (p == 2)
-			{
-				sprintf(AImes, "%d", p);
-			}
-
-			// CPU
-			if (q == 0)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 1)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-			else if (q == 2)
-			{
-				sprintf(AImes2, "%d", q);
-			}
-
-			AIinputX = *AImes - '0';
-			AIinputY = *AImes2 - '0';
-
-			// CPU
-			while ((AIinputX > 2 || AIinputY > 2) || (frame[AIinputX][AIinputY] != 0) || p > 2 || q > 2)
-			{
-
-				// CPU
-				p = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-				q = 0 + (int)(rand()*(2 - 0 + 1.0) / (1.0 + RAND_MAX));
-				if (p == 0)
-				{
-					sprintf(AImes, "%d", p);
-				}
-				else if (p == 1)
-				{
-					sprintf(AImes, "%d", p);
-				}
-				else if (p == 2)
-				{
-					sprintf(AImes, "%d", p);
-				}
-
-				// CPU
-				if (q == 0)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 1)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-				else if (q == 2)
-				{
-					sprintf(AImes2, "%d", q);
-				}
-
-
-				AIinputX = *AImes - '0';
-				AIinputY = *AImes2 - '0';
-			}
-		}
-	}
-
-	frame[AIinputX][AIinputY] = 1;
-	strcpy(AIsend, AImes);
-	strcat(AIsend, ",");
-	strcat(AIsend, AImes2);
-
-	// 送る
-	if (send(sock, AIsend, strlen(AIsend), 0) < 0)
-	{
-		//エラー処理
-		fprintf(stderr, "sendエラー\n");
-		exit(1);
-	}
-}
-
 
 int main(void)
 {
@@ -721,12 +93,7 @@ int main(void)
 	int x = 0, y = 0;
 	int playCount = 0;
 
-
 	char sendmes[256] = { 0 };
-
-	// 乱数空回し(CPU)
-	srand(time(NULL));
-	rand(); rand(); rand(); rand(); rand(); rand(); rand(); rand(); rand(); rand();
 
 	//起動時
 	printf("サーバ起動中・・・\n");
@@ -827,52 +194,39 @@ int main(void)
 			//送信するメッセージの変数
 			char mes[256] = { 0 }, mes2[256] = { 0 };
 
-			//while (y < 3)
-			//{
-			//	printf("----------\n");
-			//	while (x < 3)
-			//	{
-			//		printf("|△");
-			//		x++;
-			//	}
-			//	printf("|\n");
-			//	x = 0;
-			//	y++;
-			//}
-			//printf("----------\n");
-			//x = 0;
-			//y = 0;
+			// 表示(入力)
+			printf("X座標\n");
+			scanf("%s", &mes);
+			printf("Y座標\n");
+			scanf("%s", &mes2);
+			inputX = *mes - '0';
+			inputY = *mes2 - '0';
+			while ((inputX > 2 || inputY > 2) || (frame[inputX][inputY] != 0))
+			{
+				printf("座標が不正です!!\n");
+				printf("X座標\n");
+				scanf("%s", &mes);
+				printf("Y座標\n");
+				scanf("%s", &mes2);
+				inputX = *mes - '0';
+				inputY = *mes2 - '0';
+			}
 
-			
-			SimpleAI(playCount);
-			//printf("X座標\n");
-			//scanf("%s", &mes);
-			
+			// 座標を格納
+			frame[inputX][inputY] = 1;
+			strcpy(sendmes, mes);
+			strcat(sendmes, ",");
+			strcat(sendmes, mes2);
 
-			//printf("Y座標\n");
-			//scanf("%s", &mes2);
+			// 送る
+			if (send(sock, sendmes, strlen(sendmes), 0) < 0)
+			{
+				//エラー処理
+				fprintf(stderr, "sendエラー\n");
+				exit(1);
+			}
 
-			//inputX = *mes - '0';
-			//inputY = *mes2 - '0';
-
-			//while ((inputX > 2 || inputY > 2) || (frame[inputX][inputY] != 0))
-			//{
-			//	printf("座標が不正です!!\n");
-			//	printf("X座標\n");
-			//	scanf("%s", &mes);
-
-
-				//printf("Y座標\n");
-				//scanf("%s", &mes2);
-
-	/*			inputX = *mes - '0';
-				inputY = *mes2 - '0';*/
-			//}
-			//frame[inputX][inputY] = 1;
-			//strcpy(sendmes, mes);
-			//strcat(sendmes, ",");
-			//strcat(sendmes, mes2);
-
+			// 表示
 			printf("      0  1  2  \n");
 			while (y < 3)
 			{
@@ -890,7 +244,11 @@ int main(void)
 			x = 0;
 			y = 0;
 			printf("\n");
+
+			// ゲーム数カウント
 			playCount++;
+
+			// 勝敗判定
 			judge = Judge();
 			if (judge == 1)
 			{
@@ -902,7 +260,6 @@ int main(void)
 				printf("負け!\n");
 				exit(1);
 			}
-
 			if (playCount >= 9)
 			{
 				printf("引き分け!\n");
@@ -921,10 +278,12 @@ int main(void)
 				exit(1);
 			}
 
+			// 変換して格納
 			inputX = *(strtok(recvbuf, ",")) - '0';
 			inputY = *(strtok(NULL, ",")) - '0';
 			frame[inputX][inputY] = -1;
 
+			// 表示
 			printf("      0  1  2  \n");
 			while (y < 3)
 			{
@@ -943,7 +302,10 @@ int main(void)
 			y = 0;
 			printf("\n");
 
+			// ゲーム数カウント
 			playCount++;
+
+			// 勝敗判定
 			judge = Judge();
 			if (judge == 1)
 			{

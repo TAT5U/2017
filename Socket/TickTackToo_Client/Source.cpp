@@ -1,6 +1,6 @@
 /*2017-06-13
-狩野 達哉
-クライアントサンプルプログラム*/
+	狩野 達哉
+		クライアントサンプルプログラム*/
 
 /*****インクルード*****/
 #include<stdio.h>
@@ -15,9 +15,9 @@
 
 #define GET_ARRAY_SIZE(a)   (sizeof(a)/sizeof(a[0]))
 
-
 int frame[3][3] = { 0 };
 
+// 表示
 void DispTickTack(int i, int j)
 {
 	if (frame[i][j] == 0)
@@ -32,14 +32,13 @@ void DispTickTack(int i, int j)
 	{
 		printf("|×");
 	}
-
-
 	if (i >= 2)
 	{
 		printf("|\n");
 	}
 }
 
+// 勝敗判定
 int Judge()
 {
 	// 横
@@ -149,10 +148,13 @@ int main(void)
 			fprintf(stderr, "recvエラー\n");
 			exit(1);
 		}
+
+		// 変換して格納
 		inputX = *(strtok(buf, ","))-'0';
 		inputY = *(strtok(NULL, ",")) - '0';
 		frame[inputX][inputY] = 1;
 
+		// 表示
 		printf("      0  1  2  \n");
 		while (y < 3)
 		{
@@ -170,8 +172,11 @@ int main(void)
 		x = 0;
 		y = 0;
 		printf("\n");
+
+		// ゲーム数カウント
 		playCount++;
 
+		// 勝敗判定
 		judge = Judge();
 		if (judge == 1)
 		{
@@ -189,15 +194,13 @@ int main(void)
 			exit(1);
 		}
 		
-
+		// 表示(入力)
 		printf("X座標\n");
 		scanf("%s", &mes);
 		printf("Y座標\n");
 		scanf("%s", &mes2);
-
 		inputX = *mes - '0';
 		inputY = *mes2 - '0';
-
 		while (inputX > 2 || inputY > 2 || frame[inputX][inputY] != 0)
 		{
 			printf("座標が不正です!!\n");
@@ -209,6 +212,8 @@ int main(void)
 			inputX = *mes - '0';
 			inputY = *mes2 - '0';
 		}
+
+		// 座標を格納
 		frame[inputX][inputY] = -1;
 		strcpy(sendmes, mes);
 		strcat(sendmes, ",");
@@ -222,6 +227,7 @@ int main(void)
 			exit(1);
 		}
 
+		// 表示
 		printf("      0  1  2  \n");
 		while (y < 3)
 		{
@@ -239,7 +245,11 @@ int main(void)
 		x = 0;
 		y = 0;
 		printf("\n");
+
+		// ゲーム数カウント
 		playCount++;
+
+		// 勝敗判定
 		judge = Judge();
 		if (judge == 1)
 		{
@@ -256,7 +266,6 @@ int main(void)
 			printf("引き分け!\n");
 			exit(1);
 		}
-
 	}
 
 	//TCPセッションの終了
