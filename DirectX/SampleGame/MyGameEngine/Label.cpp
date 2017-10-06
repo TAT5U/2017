@@ -21,17 +21,17 @@ Label::Label()
 //デストラクタ
 Label::~Label()
 {
-	//開放処理
-	_pFont->Release();
+	//解放処理
+	SAFE_RELEASE(_pFont);
 }
 
 //静的関数	ラベルの作成をcocos2dxのような記述をできるようにする
 Label *Label::Create(LPCSTR str, LPCSTR font, int size)
 {
-	Label *plabel = new Label();
-	plabel->Load(font, size);
-	plabel->SetString(str);
-	return plabel;
+	Label *pLabel = new Label();
+	pLabel->Load(font, size);
+	pLabel->SetString(str);
+	return pLabel;
 }
 
 //フォントの準備

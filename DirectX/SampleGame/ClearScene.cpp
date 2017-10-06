@@ -24,13 +24,6 @@ ClearScene::~ClearScene()
 //‰Šú‰»ˆ—
 void ClearScene::Init()
 {
-	//‰æ‘œ‚Ì•\Ž¦
-	{
-		Sprite *sprite = Sprite::Create("Assets//jag.png");
-		sprite->SetAnchorPoint(0, 0);
-		sprite->SetPosition(100, 100);
-		this->AddChild(sprite);
-	}
 
 }
 

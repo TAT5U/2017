@@ -15,6 +15,12 @@ Input::Input()
 	_pKeyDevice = nullptr;
 	_pMouseDevice = nullptr;
 	_mouseState = DIMOUSESTATE2();
+
+	//2017-10-04
+	//追加
+	//詳細はヘッダ
+	_prevMouseState = DIMOUSESTATE2();
+
 	ZeroMemory(_keyState, 256);
 	ZeroMemory(_prevKeyState, 256);
 	ZeroMemory(&vib, sizeof(_XINPUT_VIBRATION));
@@ -25,10 +31,10 @@ Input::Input()
 //デストラクタ
 Input::~Input()
 {
-	//開放処理
+	//解放処理
 	_pKeyDevice->Release();
 	_pMouseDevice->Release();
-	//_pDInput->Release();
+	_pDInput->Release();
 }
 
 //初期化処理
@@ -74,6 +80,12 @@ void Input::Update()
 	//マウスのクリックの情報を取得して
 	//_mouseStateの配列に格納する
 	_pMouseDevice->Acquire();
+
+	//2017-10-04
+	//追加
+	//マウスの情報をコピー
+	_prevMouseState = _mouseState;
+
 	_pMouseDevice->GetDeviceState(sizeof(_mouseState), &_mouseState);
 
 	//コントローラーの状態を_controllerStateに格納
@@ -127,7 +139,11 @@ bool Input::IsMousePush(int buttonCode)
 	//0 : 左クリック
 	//1 : 右クリック
 	//2 : ホイール
-	if (_mouseState.rgbButtons[buttonCode] & 0x80)
+
+	//2017-10-04
+	//修正
+	//マウスのクリックを1回のみに修正
+	if ((_mouseState.rgbButtons[buttonCode] & 0x80) && !(_prevMouseState.rgbButtons[buttonCode] & 0x80))
 	{
 		return true;
 	}

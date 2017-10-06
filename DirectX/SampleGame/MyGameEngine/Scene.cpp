@@ -14,16 +14,17 @@
 Scene::Scene()
 {
 	//変数の初期化
-	_nodes.clear();
+	_pNodes.clear();
 	i = 0;
 }
 
 //デストラクタ
 Scene::~Scene()
 {
-	while (i < _nodes.size())
+	//シーン自動解放
+	while (i < _pNodes.size())
 	{
-		delete _nodes[i];
+		SAFE_DELETE(_pNodes[i]);
 		i++;
 	}
 
@@ -35,16 +36,16 @@ Scene::~Scene()
 void Scene::AddChild(Node *pNode)
 {
 	pNode->SetParent(this);
-	_nodes.push_back(pNode);
+	_pNodes.push_back(pNode);
 }
 
 //描画処理
 void Scene::Draw()
 {
 	//全ノードのDraw関数呼び出し
-	while (i < _nodes.size())
+	while (i < _pNodes.size())
 	{
-		_nodes[i]->Draw();
+		_pNodes[i]->Draw();
 		i++;
 	}
 
@@ -56,12 +57,16 @@ void Scene::Draw()
 //ノード削除
 void Scene::RemoveChild(Node *pNode)
 {
-	while (i < _nodes.size())
+	while (i < _pNodes.size())
 	{
-		if (pNode == _nodes[i])
+		if (pNode == _pNodes[i])
 		{
-			SAFE_DELETE(_nodes[i]);
-			_nodes.erase(_nodes.begin());
+			SAFE_DELETE(_pNodes[i]);
+
+			//2017-10-04
+			//修正
+			//iのカウントがなかった
+			_pNodes.erase(_pNodes.begin() + i);
 			break;
 		}
 		i++;

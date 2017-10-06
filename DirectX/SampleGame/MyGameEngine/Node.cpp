@@ -6,7 +6,6 @@
 
 /****インクルード****/
 #include "Node.h"
-
 #include"Scene.h"
 /********************/
 
@@ -20,7 +19,9 @@ Node::Node()
 	_position = D3DXVECTOR3(0, 0, 0);
 	_rotate = D3DXVECTOR3(0, 0, 0);
 	_scale = D3DXVECTOR3(1, 1, 1);
-	_parent = nullptr;
+	_target = D3DXVECTOR3(0, 0, 0);
+	_up = D3DXVECTOR3(0, 0, 0);
+	_pParent = nullptr;
 }
 
 //デストラクタ
@@ -29,23 +30,33 @@ Node::~Node()
 
 }
 
+//仮想関数
+void Node::Draw()
+{
+
+}
+
 //ノードの面積(四角形)を取得
 MyRect Node::GetBoundingBox()
 {
 	//4つの頂点の座標を取得
+
+	//2017-10-04
+	//修正
+	//範囲が横に長くなっていた
 	MyRect rect;
 	rect._left = _position.x - _size.x * _anchorPoint.x * _scale.x;
 	rect._top = _position.y - _size.y * _anchorPoint.y * _scale.y;
-	rect._width = _size.x * _scale.x + rect._left;
-	rect._height = _size.y * _scale.y + rect._top;
+	rect._width = _size.x * _scale.x;
+	rect._height = _size.y * _scale.y;
 
 	return rect;
 }
 
-//
+//親の削除
 void Node::RemoveFromParent()
 {
-	_parent->RemoveChild(this);
+	_pParent->RemoveChild(this);
 }
 
 //アンカーポイントをセット
@@ -79,10 +90,22 @@ void Node::SetScale(float x, float y, float z)
 	_scale = D3DXVECTOR3(x, y, z);
 }
 
+//見ている場所をセット
+void  Node::SetTarget(float x, float y, float z)
+{
+	_target = D3DXVECTOR3(x, y, z);
+}
+
+//カメラの上をセット
+void  Node::SetUp(float x, float y, float z)
+{
+	_up = D3DXVECTOR3(x, y, z);
+}
+
 //親をセット
 void Node::SetParent(Scene *pScene)
 {
-	_parent = pScene;
+	_pParent = pScene;
 }
 
 //サイズを取得

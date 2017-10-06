@@ -6,6 +6,7 @@
 /****インクルード****/
 #include "MyGameEngine\Scene.h"
 #include "MyGameEngine\Game.h"
+#include "MyGameEngine\Camera.h"
 /********************/
 
 
@@ -23,8 +24,14 @@ class PlayScene : public Scene
 	Label *_label;
 	/******************************************/
 
-	//
+	//スプライトの有無
 	bool _spriteFlg;
+
+	//ポリゴン
+	Quad *_quad;
+
+	//回転角度
+	int _angle;
 
 public:
 

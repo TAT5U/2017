@@ -22,9 +22,9 @@ Sprite::Sprite()
 //デストラクタ
 Sprite::~Sprite()
 {
-	//開放処理
-	_pSprite->Release();
-	_pTexture->Release();
+	//解放処理
+	SAFE_RELEASE(_pSprite);
+	SAFE_RELEASE(_pTexture);
 }
 
 //静的関数	Spriteオブジェクトを作成してLoad関数を呼び、アドレスを返す
@@ -110,7 +110,7 @@ void Sprite::Draw()
 	_pSprite->Begin(D3DXSPRITE_ALPHABLEND);
 
 	//スプライトにテクスチャを貼り付けて描画	不透明度・赤・緑・青
-	_pSprite->Draw(_pTexture, &cut, &anchor, NULL, D3DCOLOR_ARGB(100, 255, 255, 255));
+	_pSprite->Draw(_pTexture, &cut, &anchor, NULL, D3DCOLOR_ARGB(255, 255, 255, 255));
 	_pSprite->End();
 }
 

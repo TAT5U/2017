@@ -44,6 +44,11 @@ class Input
 	//クリックなどのマウスの動作の情報を格納する変数
 	DIMOUSESTATE2 _mouseState;
 
+	//2017-10-04
+	//追加
+	//マウスの前回の情報を記憶
+	DIMOUSESTATE2 _prevMouseState;
+
 	//コントローラーの情報を格納する変数
 	XINPUT_STATE _controllerState;
 

@@ -23,14 +23,14 @@ Game::Game()
 Game::~Game()
 {
 	//プログラム終了時にはオブジェクトとデバイスオブジェクトを消去しなければならない
-	//なので、終了時に開放をする
-	//開放順番は作成した順番の逆で開放を行う
-	//LPで始まる型の変数はReleaseで開放できる
-	//開放処理
-	delete g.pInput;
-	delete g.pScene;
-	g.pDevice->Release();
-	_pD3d->Release();
+	//なので、終了時に解放をする
+	//解放順番は作成した順番の逆で解放を行う
+	//LPで始まる型の変数はReleaseで解放できる
+	//解放処理
+	SAFE_DELETE(g.pInput);
+	SAFE_DELETE(g.pScene);
+	SAFE_RELEASE(g.pDevice);
+	SAFE_RELEASE(_pD3d)
 }
 
 //初期化処理
@@ -79,6 +79,16 @@ void Game::Init(HWND hWnd)
 	//InputのInitを呼び出す
 	//そのときウィンドウハンドルを引数として送る
 	g.pInput->Init(hWnd);
+
+	//アルファブレンドを有効化
+	g.pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, true);
+
+	//半透明部分の表示
+	//手前
+	g.pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+
+	//奥
+	g.pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //更新処理

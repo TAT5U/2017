@@ -7,6 +7,8 @@
 #include "Global.h"
 #include "Sprite.h"
 #include "Label.h"
+#include "Quad.h"
+#include "Light.h"
 
 //vector型を使用可能にする
 #include <vector>
@@ -23,7 +25,7 @@ class Scene
 	int i;
 
 	//ノード(スプライト)を追加するための動的配列
-	vector<Node *> _nodes;
+	vector<Node *> _pNodes;
 
 public:
 

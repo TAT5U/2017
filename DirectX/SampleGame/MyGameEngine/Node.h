@@ -7,6 +7,8 @@
 #include "Global.h"
 /********************/
 
+
+//前方宣言
 class Scene;
 
 //ラベルやスプライトをノードにまとめるためのノードクラス
@@ -29,8 +31,14 @@ protected:
 	//拡大率
 	D3DXVECTOR3 _scale;
 
+	//見ている場所
+	D3DXVECTOR3 _target;
+
+	//カメラの上
+	D3DXVECTOR3 _up;
+
 	//親を入れる変数
-	Scene *_parent;
+	Scene *_pParent;
 
 public:
 
@@ -41,13 +49,13 @@ public:
 	//継承されるデストラクタ
 	virtual ~Node();
 
-	/********************純粋仮想関数********************/
-	//純粋仮想関数は最初に0を格納しておく
-	//格納しないで実行してしまうとエラーを吐いてしまう
-	//各シーンによって処理が違うため一緒にできない
+	/********************何もしない仮想関数********************/
+	//今までは純粋仮想関数にして0を格納していたが
+	//Nodeを継承したカメラを使用できるようにするためには
+	//何もしない仮想関数に変更しないといけない
 	//引数->なし
 	//戻値->なし
-	virtual void Draw() = 0;
+	virtual void Draw();
 	/****************************************************/
 
 
@@ -57,7 +65,7 @@ public:
 	//戻値->Rect(4つの頂点)
 	MyRect GetBoundingBox();
 
-	//
+	//親の削除
 	void RemoveFromParent();
 
 	/**********************セッター**********************/
@@ -85,6 +93,12 @@ public:
 	//拡大率をセット
 	//引数->縦・横・奥
 	void SetScale(float x, float y, float z = 1);
+
+	//見ている場所をセット
+	void SetTarget(float x, float y, float z);
+
+	//カメラの上をセット
+	void SetUp(float x, float y, float z);
 
 	//親をセット
 	void SetParent(Scene *pScene);

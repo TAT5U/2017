@@ -4,7 +4,6 @@
 #pragma once
 
 /****インクルード****/
-//#include "Global.h"
 #include "Node.h"
 /********************/
 
